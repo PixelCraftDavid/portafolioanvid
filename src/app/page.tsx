@@ -1,6 +1,10 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Hero3D from "@/components/three/Hero3D";
+import Terminal from "@/components/sections/Terminal";
+import Projects from "@/components/sections/Projects";
+import Courses from "@/components/sections/Courses";
+import Contact from "@/components/sections/Contact";
 
 export default function Home() {
   return (
@@ -8,60 +12,54 @@ export default function Home() {
       <Header />
 
       <main className="pt-24">
-        {/* HERO placeholder */}
+        {/* HERO */}
         <section
-  id="inicio"
-  className="relative min-h-screen flex items-center justify-center px-6 overflow-hidden"
->
-  {/* Canvas 3D de fondo */}
-  <Hero3D />
-
-  {/* Overlay con texto */}
-  <div className="relative z-10 text-center max-w-4xl pointer-events-none">
-    <p className="font-mono text-sm text-[var(--color-primary-light)] tracking-widest mb-4">
-      SOFTWARE ENGINEER
-    </p>
-    <h1 className="text-5xl md:text-7xl font-bold mb-6">
-      Angel David Santos
-    </h1>
-    <p className="text-lg text-[var(--color-text-muted)] max-w-2xl mx-auto">
-      Transformo ideas en experiencias digitales inmersivas con React, Three.js y tecnologías web modernas.
-    </p>
-  </div>
-</section>
-
-        {/* PROYECTOS placeholder */}
-        <section
-          id="proyectos"
-          className="min-h-screen flex items-center justify-center px-6 border-t border-[var(--color-border)]"
+          id="inicio"
+          className="relative min-h-screen flex items-center justify-center px-6 overflow-hidden"
         >
-          <div className="text-center">
-            <h2 className="text-4xl font-bold mb-4">Proyectos</h2>
-            <p className="text-[var(--color-text-muted)]">Próximamente...</p>
+          <Hero3D />
+          <div className="relative z-10 text-center max-w-4xl pointer-events-none">
+            <p className="font-mono text-sm text-[var(--color-primary-light)] tracking-widest mb-4">
+              SOFTWARE ENGINEER
+            </p>
+            <h1 className="text-5xl md:text-7xl font-bold mb-6">
+              Angel David Santos
+            </h1>
+            <p className="text-lg text-[var(--color-text-muted)] max-w-2xl mx-auto">
+              Transformo ideas en experiencias digitales inmersivas con React, Three.js y tecnologías web modernas.
+            </p>
           </div>
         </section>
 
-        {/* SOBRE MÍ placeholder */}
+        {/* SOBRE MÍ */}
         <section
           id="sobre-mi"
-          className="min-h-screen flex items-center justify-center px-6 border-t border-[var(--color-border)]"
+          className="min-h-screen flex flex-col items-center justify-center px-6 py-24 border-t border-[var(--color-border)]"
         >
-          <div className="text-center">
-            <h2 className="text-4xl font-bold mb-4">Sobre mí</h2>
-            <p className="text-[var(--color-text-muted)]">Próximamente...</p>
+          <div className="max-w-4xl w-full text-center mb-12">
+            <p className="font-mono text-sm text-[var(--color-primary-light)] tracking-widest mb-4">
+              01 — SOBRE MÍ
+            </p>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Un poco sobre mí
+            </h2>
+            <p className="text-[var(--color-text-muted)] max-w-2xl mx-auto">
+              Soy ingeniero en desarrollo y gestión de software. Me apasiona construir
+              productos digitales que se sientan bien: rápidos, accesibles y con
+              detalles que sorprendan.
+            </p>
           </div>
+          <Terminal />
         </section>
 
-        {/* CONTACTO placeholder */}
-        <section
-          id="contacto"
-          className="min-h-screen flex items-center justify-center px-6 border-t border-[var(--color-border)]"
-        >
-          <div className="text-center">
-            <h2 className="text-4xl font-bold mb-4">Contacto</h2>
-            <p className="text-[var(--color-text-muted)]">Próximamente...</p>
-          </div>
-        </section>
+        {/* PROYECTOS */}
+        <Projects />
+
+        {/* CURSOS */}
+        <Courses />
+        
+         {/* CONTACTO */}
+        <Contact />
       </main>
 
       <Footer />

@@ -1,16 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import ThemeToggle from "@/components/theme/ThemeToggle";
+import { useActiveSection } from "@/hooks/useActiveSection";
 
 const NAV_LINKS = [
   { href: "#inicio", label: "Inicio" },
-  { href: "#proyectos", label: "Proyectos" },
   { href: "#sobre-mi", label: "Sobre mí" },
+  { href: "#proyectos", label: "Proyectos" },
+  { href: "#cursos", label: "Cursos" },
   { href: "#contacto", label: "Contacto" },
 ];
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const activeSection = useActiveSection(
+    NAV_LINKS.map((l) => l.href.replace("#", ""))
+  );
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -35,25 +41,39 @@ export default function Header() {
         </a>
 
         <ul className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors relative group"
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-[var(--color-primary)] group-hover:w-full transition-all duration-300" />
-              </a>
-            </li>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const isActive = activeSection === link.href.replace("#", "");
+            return (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  className={`text-sm transition-colors relative group ${
+                    isActive
+                      ? "text-[var(--color-primary-light)]"
+                      : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
+                  }`}
+                >
+                  {link.label}
+                  <span
+                    className={`absolute -bottom-1 left-0 h-px bg-[var(--color-primary)] transition-all duration-300 ${
+                      isActive ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
+                  />
+                </a>
+              </li>
+            );
+          })}
         </ul>
 
-        <a
-          href="#contacto"
-          className="hidden md:inline-flex px-4 py-2 rounded-md bg-[var(--color-primary)] hover:bg-[var(--color-primary-light)] text-white text-sm font-medium transition-all hover:shadow-[var(--shadow-glow)]"
-        >
-          Hablemos
-        </a>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <a
+            href="#contacto"
+            className="hidden md:inline-flex px-4 py-2 rounded-md bg-[var(--color-primary)] hover:bg-[var(--color-primary-light)] text-white text-sm font-medium transition-all hover:shadow-[var(--shadow-glow)]"
+          >
+            Hablemos
+          </a>
+        </div>
       </nav>
     </header>
   );

@@ -1,53 +1,78 @@
 @import "tailwindcss";
 
-@theme {
-  /* Colores base */
+/* ============================================
+   TEMA OSCURO (default)
+   ============================================ */
+:root,
+.dark {
   --color-bg: #050510;
   --color-bg-soft: #0a0a1a;
   --color-surface: #12122a;
   --color-border: rgba(124, 58, 237, 0.15);
 
-  /* Texto */
   --color-text: #f5f5f7;
   --color-text-muted: #a1a1aa;
   --color-text-dim: #52525b;
 
-  /* Acentos */
   --color-primary: #7c3aed;
   --color-primary-light: #a855f7;
   --color-primary-dark: #4c1d95;
   --color-accent: #22d3ee;
 
-  /* Tipografía */
+  --blob-color: #7c3aed;
+  --blob-emissive: #a855f7;
+  --blob-light: #a855f7;
+  --blob-light-secondary: #22d3ee;
+  --particles-color: #a855f7;
+  --env-preset: city;
+
+  --shadow-glow: 0 0 40px rgba(124, 58, 237, 0.35);
+}
+
+/* ============================================
+   TEMA CLARO (día — azul cielo #c4dafa)
+   ============================================ */
+.light {
+  --color-bg: #c4dafa;
+  --color-bg-soft: #d8e6fc;
+  --color-surface: #ffffff;
+  --color-border: rgba(37, 99, 235, 0.18);
+
+  --color-text: #0a1530;
+  --color-text-muted: #3b4a6b;
+  --color-text-dim: #7a8aa8;
+
+  --color-primary: #2563eb;
+  --color-primary-light: #3b82f6;
+  --color-primary-dark: #1e40af;
+  --color-accent: #0891b2;
+
+  --blob-color: #2563eb;
+  --blob-emissive: #60a5fa;
+  --blob-light: #60a5fa;
+  --blob-light-secondary: #c4dafa;
+  --particles-color: #1e40af;
+  --env-preset: sunset;
+
+  --shadow-glow: 0 0 40px rgba(37, 99, 235, 0.3);
+}
+
+/* ============================================
+   TOKENS COMUNES
+   ============================================ */
+@theme {
   --font-sans: var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), monospace;
 
-  /* Radios */
   --radius-sm: 6px;
   --radius-md: 12px;
   --radius-lg: 20px;
   --radius-xl: 32px;
-
-  /* Sombras */
-  --shadow-glow: 0 0 40px rgba(124, 58, 237, 0.35);
-  --shadow-glow-accent: 0 0 60px rgba(34, 211, 238, 0.25);
-
-  /* Animaciones */
-  --animate-fade-in: fade-in 0.6s ease-out;
-  --animate-slide-up: slide-up 0.6s ease-out;
 }
 
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slide-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Reset básico */
+/* ============================================
+   BASE
+   ============================================ */
 * {
   box-sizing: border-box;
 }
@@ -62,14 +87,16 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  transition: background-color 0.5s ease, color 0.5s ease;
 }
 
-/* Scrollbar custom */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
   background: var(--color-bg);
+  transition: background 0.5s ease;
 }
 ::-webkit-scrollbar-thumb {
   background: var(--color-primary-dark);
@@ -79,7 +106,7 @@ body {
   background: var(--color-primary);
 }
 
-/* Selección de texto */
+/* Selección */
 ::selection {
   background: var(--color-primary);
   color: white;
