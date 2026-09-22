@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import ProjectCarousel from "./ProjectCarousel";
+import ProjectCarousel from "./ProjectShowcase";
 
 export default function Projects() {
   return (
