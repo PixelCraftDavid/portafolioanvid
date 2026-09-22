@@ -22,10 +22,10 @@ export default function Home() {
             <p className="font-mono text-sm text-[var(--color-primary-light)] tracking-widest mb-4">
               SOFTWARE ENGINEER
             </p>
-            <h1 className="text-5xl md:text-7xl font-bold mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6">
               Angel David Santos
             </h1>
-            <p className="text-lg text-[var(--color-text-muted)] max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-[var(--color-text-muted)] max-w-2xl mx-auto px-4">
               Transformo ideas en experiencias digitales inmersivas con React, Three.js y tecnologías web modernas.
             </p>
           </div>
@@ -57,7 +57,7 @@ export default function Home() {
 
         {/* CURSOS */}
         <Courses />
-        
+
          {/* CONTACTO */}
         <Contact />
       </main>

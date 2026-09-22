@@ -64,7 +64,7 @@ export default function ProjectCarousel() {
             return (
               <div
                 key={project.slug}
-                className="flex-[0_0_85%] md:flex-[0_0_60%] lg:flex-[0_0_50%] min-w-0 px-3 md:px-6"
+                className="flex-[0_0_90%] sm:flex-[0_0_85%] md:flex-[0_0_70%] lg:flex-[0_0_55%] min-w-0 px-2 md:px-6"
               >
                 <ProjectCard3D
                   project={project}

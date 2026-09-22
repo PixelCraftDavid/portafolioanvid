@@ -109,7 +109,7 @@ export default function Terminal() {
       {/* Contenido */}
       <div
         ref={scrollRef}
-        className="p-6 font-mono text-sm max-h-[400px] overflow-y-auto"
+        className="p-4 md:p-6 font-mono text-xs md:text-sm max-h-[300px] md:max-h-[400px] overflow-y-auto"
       >
         {lines.map((line, i) => (
           <div key={i} className="whitespace-pre-wrap">

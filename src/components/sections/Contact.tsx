@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 import { Mail, MapPin, Send, CheckCircle2, AlertCircle } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/icons/BrandIcons";
 
-// ⚠️ Reemplaza con tu endpoint real de Formspree
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/moevdboa";
+// Endpoint viene de .env.local (no commit)
+const FORMSPREE_ENDPOINT = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT || "";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -74,7 +74,7 @@ export default function Contact() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-8">
           {/* Info izquierda */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -150,7 +150,7 @@ export default function Contact() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
             onSubmit={handleSubmit}
-            className="md:col-span-3 p-8 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/40 backdrop-blur-sm space-y-5"
+            className="md:col-span-3 p-6 md:p-8 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/40 backdrop-blur-sm space-y-5"
           >
             <div>
               <label
