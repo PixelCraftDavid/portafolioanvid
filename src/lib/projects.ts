@@ -16,6 +16,57 @@ export type Project = {
 };
 
 export const projects: Project[] = [
+
+  {
+    slug: "inmobiliaria-bienes-raices",
+    title: "Plataforma Inmobiliaria Serverless",
+    description:
+      "Plataforma web SPA de bienes raíces con mapas interactivos, flujo de moderación de anuncios, subida optimizada de medios y seguridad avanzada, operando con $0 de infraestructura.",
+    problem:
+      "Las soluciones inmobiliarias tradicionales dependen de infraestructura costosa o cobran altas comisiones por anuncio. Se requería una plataforma segura, rápida y escalable con mapas en tiempo real, validación estricta de datos y panel administrativo, sin generar costos operativos recurrentes.",
+    solution:
+      "Diseñé e implementé una arquitectura Jamstack/Serverless desacoplada utilizando React, Firebase (Firestore y Auth) y la API de Cloudinary. Delegué las reglas de negocio, la inmutabilidad y la seguridad directamente a la base de datos mediante Firestore Rules, permitiendo un flujo de moderación completo y mapas interactivos con Leaflet sin backend dedicado.",
+    stack: [
+      { category: "Frontend", items: ["React", "JavaScript (ES6+)", "Leaflet", "OpenStreetMap"] },
+      { category: "Backend & DB", items: ["Firebase Firestore", "Firebase Authentication"] },
+      { category: "Almacenamiento & Media", items: ["Cloudinary API (Upload & CDN)"] },
+      { category: "Seguridad & Infraestructura", items: ["Firestore Security Rules", "Email Domain Validation", "Vercel"] },
+    ],
+    challenges: [
+      {
+        title: "Arquitectura Serverless de Costo Zero ($0)",
+        description:
+          "Diseñé la lógica de negocio evitando depender de Cloud Functions para mantenerme estrictamente en el Free Tier de Firebase, trasladando la validación y autorización directamente a reglas descriptivas en Firestore.",
+      },
+      {
+        title: "Inmutabilidad de Datos y Prevención de Fraudes",
+        description:
+          "Escribí reglas de seguridad estrictas en Firestore para bloquear la modificación post-publicación en campos críticos como precio, ubicación y datos del vendedor, impidiendo alteraciones no autorizadas en el cliente.",
+      },
+      {
+        title: "Mitigación de Spam y Correos Desechables",
+        description:
+          "Desarrollé una capa de validación en dos niveles (cliente y base de datos) para denegar el registro mediante dominios de correo temporales o patrones de spam conocidos.",
+      },
+      {
+        title: "Gestión Eficiente de Recursos Multimedia",
+        description:
+          "Orquesté la carga de imágenes hacia Cloudinary desde el cliente, almacenando únicamente IDs públicos en Firestore y gestionando el ciclo de vida de los archivos al eliminar publicaciones.",
+      },
+    ],
+    results: [
+      "Operación 100% gratuita con costo $0 en infraestructura y escalabilidad bajo demanda",
+      "Panel de administración privado con flujos de aprobación y rechazo en tiempo real",
+      "Mapa interactivo de alta reactividad con agrupación de marcadores y vistas previas",
+      "Sistema de filtrado dinámico multinivel por tipo de inmueble, zona geográfica y rango de precio",
+    ],
+    tags: ["React", "Firebase", "Firestore", "Cloudinary", "Leaflet", "PWA"],
+    year: "2026",
+    image: "/images/projects/ixmiplace.png",
+    github: "https://github.com/PixelCraftDavid/ixmiplace",
+    demo: "#",
+    featured: true,
+  },
   {
     slug: "coparmex",
     title: "Coparmex",
