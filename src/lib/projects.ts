@@ -16,56 +16,135 @@ export type Project = {
 };
 
 export const projects: Project[] = [
-  {
-    slug: "ixmiplace",
-    title: "Ixmiplace — Plataforma Inmobiliaria Serverless",
-    description:
-      "Plataforma web SPA de bienes raíces con mapas interactivos, flujo de moderación de anuncios, subida optimizada de medios y seguridad avanzada, operando con $0 de infraestructura.",
-    problem:
-      "Las soluciones inmobiliarias tradicionales dependen de infraestructura costosa o cobran altas comisiones por anuncio. Se requería una plataforma segura, rápida y escalable con mapas en tiempo real, validación estricta de datos y panel administrativo, sin generar costos operativos recurrentes.",
-    solution:
-      "Diseñé e implementé una arquitectura Jamstack/Serverless desacoplada utilizando React, Firebase (Firestore y Auth) y la API de Cloudinary. Delegué las reglas de negocio, la inmutabilidad y la seguridad directamente a la base de datos mediante Firestore Rules, permitiendo un flujo de moderación completo y mapas interactivos con Leaflet sin backend dedicado.",
-    stack: [
-      { category: "Frontend", items: ["React", "JavaScript (ES6+)", "Leaflet", "OpenStreetMap"] },
-      { category: "Backend & DB", items: ["Firebase Firestore", "Firebase Authentication"] },
-      { category: "Almacenamiento & Media", items: ["Cloudinary API (Upload & CDN)"] },
-      { category: "Seguridad & Infraestructura", items: ["Firestore Security Rules", "Email Domain Validation", "Vercel"] },
-    ],
-    challenges: [
-      {
-        title: "Arquitectura Serverless de Costo Zero ($0)",
-        description:
-          "Diseñé la lógica de negocio evitando depender de Cloud Functions para mantenerme strictly en el Free Tier de Firebase, trasladando la validación y autorización directamente a reglas descriptivas en Firestore.",
-      },
-      {
-        title: "Inmutabilidad de Datos y Prevención de Fraudes",
-        description:
-          "Escribí reglas de seguridad estrictas en Firestore para bloquear la modificación post-publicación en campos críticos como precio, ubicación y datos del vendedor, impidiendo alteraciones no autorizadas en el cliente.",
-      },
-      {
-        title: "Mitigación de Spam y Correos Desechables",
-        description:
-          "Desarrollé una capa de validación en dos niveles (cliente y base de datos) para denegar el registro mediante dominios de correo temporales o patrones de spam conocidos.",
-      },
-      {
-        title: "Gestión Eficiente de Recursos Multimedia",
-        description:
-          "Orquesté la carga de imágenes hacia Cloudinary desde el cliente, almacenando únicamente IDs públicos en Firestore y gestionando el ciclo de vida de los archivos al eliminar publicaciones.",
-      },
-    ],
-    results: [
-      "Operación 100% gratuita con costo $0 en infraestructura y escalabilidad bajo demanda",
-      "Panel de administración privado con flujos de aprobación y rechazo en tiempo real",
-      "Mapa interactivo de alta reactividad con agrupación de marcadores y vistas previas",
-      "Sistema de filtrado dinámico multinivel por tipo de inmueble, zona geográfica y rango de precio",
-    ],
-    tags: ["React", "Firebase", "Firestore", "Cloudinary", "Leaflet", "PWA"],
-    year: "2026",
-    image: "/images/projects/ixmiplace.png",
-    github: "https://github.com/PixelCraftDavid/ixmiplace",
-    demo: "https://ixmiplace.vercel.app/",
-    featured: true,
-  },
+  ```ts
+{
+  slug: "ixmiplace",
+  title: "IxmiPlace — Plataforma Inmobiliaria Serverless",
+  description:
+    "Desarrollé una plataforma inmobiliaria web progresiva (PWA) para publicar, explorar y administrar propiedades. Implementé autenticación, moderación de anuncios, búsqueda con filtros, mapas interactivos, gestión de imágenes y control de acceso mediante Firebase Security Rules.",
+
+  problem:
+    "La publicación y búsqueda de propiedades en la zona se realizaba principalmente mediante redes sociales y grupos locales, donde la información podía estar dispersa, desactualizada y sin una estructura uniforme. El proyecto buscó centralizar las publicaciones en una plataforma orientada a propiedades de Ixmiquilpan, facilitando su búsqueda, ubicación y administración.",
+
+  solution:
+    "Diseñé y desarrollé una SPA/PWA con React y TypeScript, utilizando Firebase como infraestructura serverless. Firestore gestiona las publicaciones y datos de la aplicación, Firebase Authentication administra las cuentas de usuario y los roles, mientras que Cloudinary se utiliza para almacenar y entregar las imágenes. Incorporé Leaflet y OpenStreetMap para representar las propiedades geográficamente y desarrollé un flujo de moderación para revisar las publicaciones antes de hacerlas públicas.",
+
+  stack: [
+    {
+      category: "Frontend",
+      items: [
+        "React",
+        "TypeScript",
+        "Vite",
+        "Tailwind CSS",
+        "React Router"
+      ]
+    },
+    {
+      category: "Backend & Base de datos",
+      items: [
+        "Firebase Firestore",
+        "Firebase Authentication"
+      ]
+    },
+    {
+      category: "Mapas",
+      items: [
+        "Leaflet",
+        "OpenStreetMap"
+      ]
+    },
+    {
+      category: "Imágenes",
+      items: [
+        "Cloudinary",
+        "Cloudinary CDN"
+      ]
+    },
+    {
+      category: "Seguridad",
+      items: [
+        "Firestore Security Rules",
+        "Control de acceso por roles",
+        "Validación de datos"
+      ]
+    },
+    {
+      category: "Deployment",
+      items: [
+        "Vercel",
+        "PWA"
+      ]
+    }
+  ],
+
+  challenges: [
+    {
+      title: "Diseño de una arquitectura serverless",
+      description:
+        "Construí la aplicación sin mantener un servidor backend tradicional. Utilicé Firebase para autenticación y persistencia de datos, delegando la autorización y las restricciones de acceso a Firestore Security Rules."
+    },
+    {
+      title: "Control de acceso y autorización",
+      description:
+        "Implementé reglas de Firestore para diferenciar las operaciones permitidas a usuarios y administradores. Las reglas controlan quién puede consultar, crear, modificar o eliminar información y protegen campos sensibles de las publicaciones."
+    },
+    {
+      title: "Flujo de moderación de publicaciones",
+      description:
+        "Diseñé un flujo de estados para controlar el ciclo de vida de una publicación, permitiendo que los administradores revisen, aprueben, rechacen o gestionen anuncios antes de su exposición pública."
+    },
+    {
+      title: "Gestión y optimización de imágenes",
+      description:
+        "Integré Cloudinary para recibir y entregar las fotografías de las propiedades, manteniendo en Firestore únicamente las referencias necesarias para administrar los recursos multimedia."
+    },
+    {
+      title: "Consultas y filtros en Firestore",
+      description:
+        "Implementé consultas en tiempo real para obtener publicaciones vigentes y posteriormente apliqué filtros y ordenamiento en el cliente para búsqueda por categoría, operación, fecha y precio."
+    },
+    {
+      title: "Experiencia multiplataforma mediante PWA",
+      description:
+        "Convertí la aplicación en una Progressive Web App para permitir su instalación en dispositivos móviles y ofrecer una experiencia similar a una aplicación nativa manteniendo una única base de código web."
+    }
+  ],
+
+  results: [
+    "Aplicación web progresiva (PWA) desplegada y accesible desde dispositivos móviles y de escritorio",
+    "Autenticación mediante correo electrónico y Google",
+    "Sistema de publicaciones con revisión y moderación administrativa",
+    "Control de acceso implementado mediante Firebase Security Rules",
+    "Búsqueda y filtrado por categoría, operación, fecha y precio",
+    "Mapa interactivo para visualizar la ubicación de las propiedades",
+    "Gestión de fotografías mediante Cloudinary",
+    "Arquitectura serverless sin necesidad de mantener un servidor backend tradicional"
+  ],
+
+  tags: [
+    "React",
+    "TypeScript",
+    "Firebase",
+    "Firestore",
+    "Cloudinary",
+    "Leaflet",
+    "PWA",
+    "Vercel"
+  ],
+
+  year: "2026",
+
+  image: "/images/projects/ixmiplace.png",
+
+  github: "https://github.com/PixelCraftDavid/ixmiplace",
+
+  demo: "https://ixmiplace.vercel.app/",
+
+  featured: true,
+},
+```
+
   {
     slug: "coparmex",
     title: "Coparmex",
