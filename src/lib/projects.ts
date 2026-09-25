@@ -27,7 +27,7 @@ export const projects: Project[] = [
     "La publicación y búsqueda de propiedades en la zona se realizaba principalmente mediante redes sociales y grupos locales, donde la información podía estar dispersa, desactualizada y sin una estructura uniforme. El proyecto buscó centralizar las publicaciones en una plataforma orientada a propiedades de Ixmiquilpan, facilitando su búsqueda, ubicación y administración.",
 
   solution:
-    "Diseñé y desarrollé una SPA/PWA con React y TypeScript, utilizando Firebase como infraestructura serverless. Firestore gestiona las publicaciones y datos de la aplicación, Firebase Authentication administra las cuentas de usuario y los roles, mientras que Cloudinary se utiliza para almacenar y entregar las imágenes. Incorporé Leaflet y OpenStreetMap para representar las propiedades geográficamente y desarrollé un flujo de moderación para revisar las publicaciones antes de hacerlas públicas.",
+    "Diseñé y desarrollé una SPA/PWA con React y TypeScript, utilizando Firebase como infraestructura serverless. Firestore gestiona las publicaciones y datos de la aplicación, Firebase Authentication administra las cuentas de usuario y los roles, mientras que Cloudinary se utiliza para almacenar y entregar las imágenes. Incorporé Leaflet y OpenStreetMap para representar las propiedades geográficamente y desarrollé un flujo de moderación para revisar las publicaciones antes de hacerlas públicas. Presté especial atención a la consistencia de datos y a la resiliencia frente a fallos transitorios de red, dado que toda la aplicación depende de listeners en tiempo real y reglas de seguridad declarativas en el servidor.",
 
   stack: [
     {
@@ -85,9 +85,24 @@ export const projects: Project[] = [
         "Construí la aplicación sin mantener un servidor backend tradicional. Utilicé Firebase para autenticación y persistencia de datos, delegando la autorización y las restricciones de acceso a Firestore Security Rules."
     },
     {
-      title: "Control de acceso y autorización",
+      title: "Consistencia atómica en operaciones concurrentes",
       description:
-        "Implementé reglas de Firestore para diferenciar las operaciones permitidas a usuarios y administradores. Las reglas controlan quién puede consultar, crear, modificar o eliminar información y protegen campos sensibles de las publicaciones."
+        "El sistema de favoritos requería mantener sincronizado, en tiempo real, un contador de popularidad en cada publicación con las acciones individuales de guardar/quitar de cada usuario. Implementé la escritura del favorito y la actualización del contador como una única operación atómica con writeBatch e increment(), y diseñé la regla de seguridad correspondiente para que solo permitiera modificar ese campo específico y en incrementos de exactamente uno, evitando así tanto condiciones de carrera como manipulación directa del contador desde el cliente."
+    },
+    {
+      title: "Depuración de una falla intermitente en reglas de seguridad",
+      description:
+        "Un mismo query público, que debía funcionar sin importar el estado de autenticación, empezó a fallar de forma consistente para un usuario específico mientras funcionaba para el resto. Rastreé el problema hasta un campo de expiración que, al haber sido editado manualmente desde la consola de Firebase, había cambiado de tipo numérico a Timestamp — y la regla de seguridad comparaba ambos tipos de forma incompatible. Como Firestore evalúa las reglas por documento antes de decidir si una consulta de colección es válida, ese único documento con el tipo incorrecto invalidaba la respuesta completa del listener para todos los usuarios. Corregí el dato y reescribí la regla para verificar explícitamente el tipo antes de comparar, evitando que un solo documento mal tipado pudiera tumbar toda la consulta."
+    },
+    {
+      title: "Listeners en tiempo real resilientes a fallos transitorios",
+      description:
+        "Detecté que los listeners de Firestore (onSnapshot) podían recibir errores de permisos transitorios durante la reconexión del canal de comunicación, especialmente en el instante de un cambio de sesión o en cargas en frío desde dispositivos móviles. Implementé una capa de reintento con backoff progresivo y recreación controlada del listener ante estos fallos, en lugar de dejar que la interfaz se quedara en un estado vacío permanente tras un error puntual del SDK."
+    },
+    {
+      title: "Control de acceso granular por campo",
+      description:
+        "Además de diferenciar operaciones entre usuarios y administradores, diseñé reglas de Firestore capaces de autorizar actualizaciones parciales muy específicas — por ejemplo, permitir que cualquier usuario autenticado incremente un contador de vistas o reportes sin poder tocar ningún otro campo de la publicación, usando request.resource.data.diff().affectedKeys() para restringir exactamente qué se puede modificar en cada tipo de operación."
     },
     {
       title: "Flujo de moderación de publicaciones",
@@ -100,11 +115,6 @@ export const projects: Project[] = [
         "Integré Cloudinary para recibir y entregar las fotografías de las propiedades, manteniendo en Firestore únicamente las referencias necesarias para administrar los recursos multimedia."
     },
     {
-      title: "Consultas y filtros en Firestore",
-      description:
-        "Implementé consultas en tiempo real para obtener publicaciones vigentes y posteriormente apliqué filtros y ordenamiento en el cliente para búsqueda por categoría, operación, fecha y precio."
-    },
-    {
       title: "Experiencia multiplataforma mediante PWA",
       description:
         "Convertí la aplicación en una Progressive Web App para permitir su instalación en dispositivos móviles y ofrecer una experiencia similar a una aplicación nativa manteniendo una única base de código web."
@@ -115,7 +125,9 @@ export const projects: Project[] = [
     "Aplicación web progresiva (PWA) desplegada y accesible desde dispositivos móviles y de escritorio",
     "Autenticación mediante correo electrónico y Google",
     "Sistema de publicaciones con revisión y moderación administrativa",
-    "Control de acceso implementado mediante Firebase Security Rules",
+    "Sistema de favoritos con contador atómico consistente mediante writeBatch e increment()",
+    "Control de acceso granular implementado mediante Firebase Security Rules a nivel de campo",
+    "Listeners en tiempo real con reintento automático ante fallos transitorios de conexión",
     "Búsqueda y filtrado por categoría, operación, fecha y precio",
     "Mapa interactivo para visualizar la ubicación de las propiedades",
     "Gestión de fotografías mediante Cloudinary",
