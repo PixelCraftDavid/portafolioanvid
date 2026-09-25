@@ -16,7 +16,7 @@ export type Project = {
 };
 
 export const projects: Project[] = [
-  ```ts
+  
 {
   slug: "ixmiplace",
   title: "IxmiPlace — Plataforma Inmobiliaria Serverless",
@@ -143,7 +143,6 @@ export const projects: Project[] = [
 
   featured: true,
 },
-```
 
   {
     slug: "coparmex",
