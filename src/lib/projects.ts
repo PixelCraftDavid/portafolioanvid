@@ -16,10 +16,9 @@ export type Project = {
 };
 
 export const projects: Project[] = [
-
   {
-    slug: "inmobiliaria-bienes-raices",
-    title: "Plataforma Inmobiliaria Serverless",
+    slug: "ixmiplace",
+    title: "Ixmiplace — Plataforma Inmobiliaria Serverless",
     description:
       "Plataforma web SPA de bienes raíces con mapas interactivos, flujo de moderación de anuncios, subida optimizada de medios y seguridad avanzada, operando con $0 de infraestructura.",
     problem:
@@ -36,7 +35,7 @@ export const projects: Project[] = [
       {
         title: "Arquitectura Serverless de Costo Zero ($0)",
         description:
-          "Diseñé la lógica de negocio evitando depender de Cloud Functions para mantenerme estrictamente en el Free Tier de Firebase, trasladando la validación y autorización directamente a reglas descriptivas en Firestore.",
+          "Diseñé la lógica de negocio evitando depender de Cloud Functions para mantenerme strictly en el Free Tier de Firebase, trasladando la validación y autorización directamente a reglas descriptivas en Firestore.",
       },
       {
         title: "Inmutabilidad de Datos y Prevención de Fraudes",
@@ -64,7 +63,7 @@ export const projects: Project[] = [
     year: "2026",
     image: "/images/projects/ixmiplace.png",
     github: "https://github.com/PixelCraftDavid/ixmiplace",
-    demo: "#",
+    demo: "https://ixmiplace.vercel.app/",
     featured: true,
   },
   {
