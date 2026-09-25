@@ -21,13 +21,13 @@ export const projects: Project[] = [
   slug: "ixmiplace",
   title: "IxmiPlace — Plataforma Inmobiliaria Serverless",
   description:
-    "Desarrollé una plataforma inmobiliaria web progresiva (PWA) para publicar, explorar y administrar propiedades. Implementé autenticación, moderación de anuncios, búsqueda con filtros, mapas interactivos, gestión de imágenes y control de acceso mediante Firebase Security Rules.",
+    "Desarrollé una plataforma inmobiliaria web progresiva (PWA) para publicar, explorar y administrar propiedades, con un flujo de moderación editorial y un sistema de confianza para reducir publicaciones fraudulentas o de baja calidad. Implementé autenticación con verificación obligatoria de correo, búsqueda con filtros avanzados, mapas interactivos, gestión de imágenes y control de acceso mediante Firebase Security Rules.",
 
   problem:
-    "La publicación y búsqueda de propiedades en la zona se realizaba principalmente mediante redes sociales y grupos locales, donde la información podía estar dispersa, desactualizada y sin una estructura uniforme. El proyecto buscó centralizar las publicaciones en una plataforma orientada a propiedades de Ixmiquilpan, facilitando su búsqueda, ubicación y administración.",
+    "La publicación y búsqueda de propiedades en la zona se realizaba principalmente mediante redes sociales y grupos locales, donde la información podía estar dispersa, desactualizada y sin una estructura uniforme, además de no existir ningún mecanismo de moderación o verificación de quien publicaba. El proyecto buscó centralizar las publicaciones en una plataforma orientada a propiedades de Ixmiquilpan, con revisión editorial y controles anti-abuso, facilitando su búsqueda, ubicación y administración.",
 
   solution:
-    "Diseñé y desarrollé una SPA/PWA con React y TypeScript, utilizando Firebase como infraestructura serverless. Firestore gestiona las publicaciones y datos de la aplicación, Firebase Authentication administra las cuentas de usuario y los roles, mientras que Cloudinary se utiliza para almacenar y entregar las imágenes. Incorporé Leaflet y OpenStreetMap para representar las propiedades geográficamente y desarrollé un flujo de moderación para revisar las publicaciones antes de hacerlas públicas. Presté especial atención a la consistencia de los datos y a la resiliencia frente a fallos transitorios de red, dado que la aplicación depende de listeners en tiempo real y de reglas de seguridad declarativas evaluadas en el servidor.",
+    "Diseñé y desarrollé una SPA/PWA con React y TypeScript, utilizando Firebase como infraestructura serverless. Firestore gestiona las publicaciones y datos de la aplicación, Firebase Authentication administra las cuentas de usuario y los roles, mientras que Cloudinary se utiliza para almacenar y entregar las imágenes conservando sus public_id para poder eliminarlas correctamente. Incorporé Leaflet y OpenStreetMap para representar las propiedades geográficamente, y construí un panel de administrador para moderar publicaciones (aprobar, rechazar con motivo, o regresar a revisión) y gestionar reportes de usuarios. Decidí no usar Cloud Functions para mantener el proyecto dentro de los niveles gratuitos de los servicios utilizados, lo cual influyó directamente en cómo diseñé la autorización: toda la lógica de negocio que en otro contexto viviría en un backend se implementó como reglas declarativas de Firestore evaluadas del lado del servidor.",
 
   stack: [
     {
@@ -58,15 +58,18 @@ export const projects: Project[] = [
       category: "Imágenes",
       items: [
         "Cloudinary",
-        "Cloudinary CDN"
+        "Cloudinary CDN",
+        "Gestión de public_id para eliminación"
       ]
     },
     {
-      category: "Seguridad",
+      category: "Seguridad y confianza",
       items: [
         "Firestore Security Rules",
         "Control de acceso por roles",
-        "Validación de datos"
+        "Verificación obligatoria de correo",
+        "Bloqueo de dominios de correo desechables",
+        "Sistema de reportes"
       ]
     },
     {
@@ -82,40 +85,47 @@ export const projects: Project[] = [
     {
       title: "Arquitectura serverless con autorización declarativa",
       description:
-        "Construí la aplicación sin mantener un servidor backend tradicional, delegando la autorización y las restricciones de acceso a Firestore Security Rules. Diseñé reglas capaces de autorizar actualizaciones parciales muy específicas — por ejemplo, permitir que un usuario incremente un contador de vistas o reportes sin poder tocar ningún otro campo de la publicación — usando request.resource.data.diff().affectedKeys() para restringir con precisión qué se puede modificar en cada tipo de operación."
+        "Construí la aplicación sin mantener un servidor backend tradicional, decidiendo deliberadamente no usar Cloud Functions para mantener el proyecto dentro de los niveles gratuitos de los servicios. Esto significó llevar toda la lógica de negocio y autorización a Firestore Security Rules, incluyendo reglas capaces de autorizar actualizaciones parciales muy específicas usando request.resource.data.diff().affectedKeys() para restringir con precisión qué campos puede modificar cada tipo de operación."
+    },
+    {
+      title: "Integridad de datos tras la publicación",
+      description:
+        "Para evitar que una publicación aprobada cambiara su naturaleza después de moderarse (por ejemplo, publicar como renta económica y luego cambiar el precio o la ubicación), bloqueé mediante reglas de Firestore la edición de campos sensibles — categoría, operación, precio, zona, ubicación y WhatsApp — una vez creada la publicación, permitiendo solo su actualización a través del flujo de moderación o por un administrador."
+    },
+    {
+      title: "Moderación editorial y prevención de abuso",
+      description:
+        "Construí un panel de administrador para revisar publicaciones pendientes, aprobarlas, rechazarlas con un motivo explícito o regresarlas a revisión, junto con un sistema de reportes y su propio panel de gestión. Reforcé la verificación de identidad exigiendo correo verificado y bloqueando dominios de correo temporales conocidos tanto en el cliente como en las propias reglas de Firestore, para que la restricción no dependiera únicamente de la validación en el frontend."
     },
     {
       title: "Consistencia de favoritos ante escrituras concurrentes",
       description:
-        "El sistema de favoritos necesitaba mantener sincronizado, en tiempo real, un contador de popularidad en cada publicación con las acciones individuales de cada usuario. Agrupé la escritura del favorito y la actualización del contador en un writeBatch, usando increment() para que el servidor aplicara el cambio directamente sin depender de una lectura previa, y diseñé la regla de seguridad para que solo aceptara modificar ese campo en incrementos de exactamente uno, evitando manipulación directa del contador desde el cliente."
+        "El sistema de favoritos necesitaba mantener sincronizado, en tiempo real, un contador de popularidad en cada publicación con las acciones individuales de cada usuario. Agrupé la escritura del favorito y la actualización del contador en un writeBatch, usando increment() para que el servidor aplicara el cambio directamente sin depender de una lectura previa, y diseñé la regla de seguridad para que solo aceptara modificar ese campo en incrementos de exactamente uno."
     },
     {
       title: "Depuración de reglas de seguridad y tipos de datos",
       description:
-        "Diagnostiqué un fallo donde una consulta pública, que no debía depender del estado de autenticación, empezaba a fallar por completo para todos los usuarios. La causa era un solo documento cuyo campo de expiración había cambiado de tipo numérico a Timestamp al editarlo manualmente desde la consola de Firebase — y Firestore invalida toda la consulta si no puede evaluar la regla de seguridad sobre cualquiera de los documentos candidatos. Corregí el dato y reforcé la regla para verificar el tipo antes de comparar."
+        "Diagnostiqué un fallo donde una consulta pública dejaba de funcionar por completo para todos los usuarios. La causa era un solo documento cuyo campo de expiración había cambiado de tipo numérico a Timestamp al editarlo manualmente desde la consola de Firebase — y Firestore invalida toda la consulta si no puede evaluar la regla de seguridad sobre cualquiera de los documentos candidatos. Corregí el dato y reforcé la regla para verificar el tipo antes de comparar."
     },
     {
       title: "Resiliencia de listeners en tiempo real",
       description:
         "Identifiqué que los listeners de Firestore (onSnapshot) podían recibir errores de permisos transitorios durante la reconexión del canal de comunicación, especialmente al iniciar sesión o en cargas en frío desde dispositivos móviles. Implementé una capa de reintento con backoff progresivo y recreación controlada del listener, en lugar de dejar que la interfaz quedara vacía de forma permanente tras un fallo puntual del SDK."
-    },
-    {
-      title: "Moderación, gestión de imágenes y experiencia PWA",
-      description:
-        "Diseñé un flujo de estados para que los administradores revisen, aprueben o rechacen publicaciones antes de su exposición pública. Integré Cloudinary para recibir y entregar las fotografías, manteniendo en Firestore únicamente las referencias necesarias, y convertí la aplicación en una Progressive Web App para permitir su instalación en dispositivos móviles con una única base de código."
     }
   ],
 
   results: [
     "Aplicación web progresiva (PWA) desplegada y accesible desde dispositivos móviles y de escritorio",
-    "Autenticación mediante correo electrónico y Google",
-    "Sistema de publicaciones con revisión y moderación administrativa",
+    "Autenticación mediante correo electrónico y Google, con verificación obligatoria y bloqueo de dominios desechables",
+    "Panel de administrador con moderación completa: aprobación, rechazo con motivo y reversión a revisión",
+    "Sistema de reportes con panel de gestión para administradores",
+    "Campos sensibles de cada publicación bloqueados contra edición tras su aprobación",
     "Sistema de favoritos con actualización consistente del contador mediante escrituras agrupadas e increment()",
     "Control de acceso granular implementado mediante Firebase Security Rules a nivel de campo",
     "Listeners en tiempo real con reintento automático ante fallos transitorios de conexión",
-    "Búsqueda y filtrado por categoría, operación, fecha y precio",
-    "Mapa interactivo para visualizar la ubicación de las propiedades",
-    "Gestión de fotografías mediante Cloudinary",
+    "Búsqueda y filtrado avanzado por categoría, operación, texto, fecha y precio",
+    "Mapa interactivo con marcadores y ventanas de información por propiedad",
+    "Gestión de fotografías mediante Cloudinary, incluyendo sus public_id para permitir su eliminación",
     "Arquitectura serverless sin necesidad de mantener un servidor backend tradicional"
   ],
 
